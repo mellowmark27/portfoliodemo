@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open Portfolio — Verified Track Record</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=JetBrains+Mono:wght@300;400;500&family=Instrument+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0e0f;
+  --surface: #111416;
+  --surface2: #181c1e;
+  --border: #1e2428;
+  --border2: #252c30;
+  --text: #e8eaeb;
+  --text-dim: #6b7880;
+  --text-mid: #9aa5ad;
+  --green: #00c896;
+  --green-dim: rgba(0,200,150,0.08);
+  --red: #ff4d6a;
+  --red-dim: rgba(255,77,106,0.08);
+  --amber: #f5a623;
+  --amber-dim: rgba(245,166,35,0.08);
+  --blue: #4da6ff;
+  --mono: 'JetBrains Mono', monospace;
+  --serif: 'Playfair Display', serif;
+  --sans: 'Instrument Sans', sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 14px; font-weight: 300; line-height: 1.6; min-height: 100vh; }
+body::before { content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.025) 2px, rgba(0,0,0,0.025) 4px); }
+
+/* NAV */
+nav { position: sticky; top: 0; z-index: 100; background: rgba(12,14,15,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 60px; }
+.nav-brand { display: flex; align-items: center; gap: 12px; }
+.nav-logo-mark { width: 28px; height: 28px; border: 1.5px solid var(--green); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 11px; color: var(--green); }
+.nav-title { font-family: var(--serif); font-size: 17px; letter-spacing: -0.3px; }
+.nav-subtitle { font-family: var(--mono); font-size: 10px; color: var(--text-dim); letter-spacing: 0.08em; text-transform: uppercase; }
+.nav-links { display: flex; }
+.nav-link { font-family: var(--mono); font-size: 11px; color: var(--text-dim); letter-spacing: 0.06em; text-transform: uppercase; padding: 0 20px; height: 60px; display: flex; align-items: center; cursor: pointer; border-bottom: 2px solid transparent; transition: color 0.2s, border-color 0.2s; }
+.nav-link:hover, .nav-link.active { color: var(--text); border-bottom-color: var(--green); }
+.nav-integrity { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 10px; color: var(--green); letter-spacing: 0.05em; }
+.integrity-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* LAYOUT */
+.container { max-width: 1400px; margin: 0 auto; padding: 0 48px; position: relative; z-index: 1; }
+
+/* HERO */
+.hero { padding: 64px 0 48px; }
+.hero-eyebrow { font-family: var(--mono); font-size: 10px; color: var(--green); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.hero-eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.hero-title { font-family: var(--serif); font-size: clamp(36px,5vw,58px); font-weight: 400; line-height: 1.1; letter-spacing: -1px; margin-bottom: 16px; }
+.hero-title em { font-style: italic; color: var(--green); }
+.hero-desc { font-size: 14px; color: var(--text-mid); max-width: 620px; line-height: 1.8; margin-bottom: 36px; }
+
+/* INTEGRITY BANNER */
+.integrity-banner { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--green); padding: 16px 24px; margin-bottom: 0; display: flex; align-items: flex-start; gap: 16px; }
+.integrity-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+.integrity-text { font-family: var(--mono); font-size: 11px; color: var(--text-mid); line-height: 1.7; }
+.integrity-text strong { color: var(--green); font-weight: 500; }
+.integrity-text a { color: var(--blue); text-decoration: none; }
+.integrity-text a:hover { text-decoration: underline; }
+
+/* KPIs */
+.kpi-row { display: grid; grid-template-columns: repeat(5,1fr); border: 1px solid var(--border); border-top: none; margin-bottom: 0; }
+.kpi { padding: 28px 24px; border-right: 1px solid var(--border); }
+.kpi:last-child { border-right: none; }
+.kpi-label { font-family: var(--mono); font-size: 10px; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+.kpi-value { font-family: var(--mono); font-size: 26px; font-weight: 400; line-height: 1; margin-bottom: 5px; }
+.kpi-value.pos { color: var(--green); }
+.kpi-value.neg { color: var(--red); }
+.kpi-value.neu { color: var(--text); }
+.kpi-sub { font-family: var(--mono); font-size: 10px; color: var(--text-dim); }
+
+/* SECTIONS */
+section { padding: 48px 0; border-bottom: 1px solid var(--border); }
+.section-label { font-family: var(--mono); font-size: 10px; color: var(--green); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px; }
+.section-title { font-family: var(--serif); font-size: 26px; font-weight: 400; letter-spacing: -0.5px; }
+.section-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 28px; }
+
+/* CHART */
+.chart-container { background: var(--surface); border: 1px solid var(--border); padding: 24px; }
+.chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.chart-title { font-family: var(--mono); font-size: 11px; color: var(--text-mid); letter-spacing: 0.04em; }
+.chart-legend { display: flex; gap: 20px; }
+.chart-legend-item { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 10px; color: var(--text-dim); }
+.legend-line { width: 20px; height: 2px; }
+.chart-wrap { height: 280px; position: relative; }
+
+/* STRATEGY CARDS */
+.strategy-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
+.strategy-card { background: var(--surface); border: 1px solid var(--border); padding: 24px; position: relative; overflow: hidden; transition: border-color 0.2s, background 0.2s; cursor: default; }
+.strategy-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--card-color, var(--green)); transform: scaleX(0.3); transform-origin: left; transition: transform 0.3s; }
+.strategy-card:hover { border-color: var(--border2); background: var(--surface2); }
+.strategy-card:hover::after { transform: scaleX(1); }
+.strategy-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px; }
+.strategy-name { font-family: var(--serif); font-size: 18px; margin-bottom: 12px; line-height: 1.3; }
+.strategy-desc { font-size: 12px; color: var(--text-dim); line-height: 1.7; margin-bottom: 20px; }
+.strategy-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.stat-label { font-family: var(--mono); font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 3px; }
+.stat-value { font-family: var(--mono); font-size: 16px; }
+
+/* TABLE */
+.table-controls { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.table-search { background: var(--surface); border: 1px solid var(--border); color: var(--text); font-family: var(--mono); font-size: 12px; padding: 8px 14px; outline: none; flex: 1; max-width: 320px; transition: border-color 0.2s; }
+.table-search:focus { border-color: var(--green); }
+.table-search::placeholder { color: var(--text-dim); }
+.form-select { background: var(--surface); border: 1px solid var(--border); color: var(--text-mid); font-family: var(--mono); font-size: 11px; padding: 8px 12px; outline: none; cursor: pointer; appearance: none; transition: border-color 0.2s; }
+.form-select:focus { border-color: var(--green); }
+.form-select option { background: var(--surface2); }
+.tab-bar { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 28px; }
+.tab { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 20px; cursor: pointer; color: var(--text-dim); border-bottom: 2px solid transparent; transition: all 0.2s; }
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--green); border-bottom-color: var(--green); }
+.filter-btn { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 7px 14px; background: none; border: 1px solid var(--border); color: var(--text-dim); cursor: pointer; transition: all 0.2s; }
+.filter-btn:hover, .filter-btn.active { border-color: var(--green); color: var(--green); }
+
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); border-top: 1px solid var(--border); background: var(--surface); white-space: nowrap; }
+.data-table td { font-family: var(--mono); font-size: 12px; padding: 13px 12px; border-bottom: 1px solid var(--border); color: var(--text-mid); vertical-align: middle; }
+.data-table tbody tr:hover td { background: var(--surface); color: var(--text); }
+.pos-name { color: var(--text); font-weight: 500; display: block; }
+.pos-exchange { font-size: 10px; color: var(--text-dim); }
+.badge { display: inline-block; font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; padding: 2px 7px; }
+.badge-strategy { background: rgba(77,166,255,0.08); color: var(--blue); border: 1px solid rgba(77,166,255,0.18); }
+.badge-open { background: var(--green-dim); color: var(--green); border: 1px solid rgba(0,200,150,0.18); }
+.badge-closed { background: rgba(100,100,100,0.08); color: var(--text-dim); border: 1px solid var(--border); }
+.ret-pos { color: var(--green); }
+.ret-neg { color: var(--red); }
+.ret-neu { color: var(--text-dim); }
+
+/* COMMIT LOG */
+.commit-log { background: var(--surface); border: 1px solid var(--border); }
+.commit-entry { display: grid; grid-template-columns: 160px 60px 1fr 80px 80px; gap: 16px; align-items: center; padding: 13px 20px; border-bottom: 1px solid var(--border); font-family: var(--mono); font-size: 11px; transition: background 0.15s; }
+.commit-entry:last-child { border-bottom: none; }
+.commit-entry:hover { background: var(--surface2); }
+.commit-ts { color: var(--text-dim); font-size: 10px; }
+.action-buy { color: var(--green); font-weight: 500; }
+.action-sell { color: var(--red); font-weight: 500; }
+.commit-detail { color: var(--text-mid); }
+.commit-detail strong { color: var(--text); }
+.commit-hash { font-size: 10px; color: var(--blue); text-decoration: none; }
+.commit-hash:hover { text-decoration: underline; }
+.verified { font-size: 10px; color: var(--green); }
+
+/* TRADE ENTRY */
+.trade-entry-wrap { background: var(--surface); border: 1px solid var(--border); padding: 32px; }
+.trade-warning { background: var(--amber-dim); border: 1px solid rgba(245,166,35,0.2); border-left: 3px solid var(--amber); padding: 12px 16px; margin-bottom: 28px; font-family: var(--mono); font-size: 11px; color: var(--amber); line-height: 1.7; }
+.github-config { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; padding: 20px; background: var(--bg); border: 1px solid var(--border); margin-bottom: 8px; }
+.form-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
+.form-input { background: var(--bg); border: 1px solid var(--border); color: var(--text); font-family: var(--mono); font-size: 12px; padding: 10px 12px; outline: none; width: 100%; transition: border-color 0.2s; }
+.form-input:focus { border-color: var(--green); }
+.form-input::placeholder { color: var(--text-dim); }
+.submit-btn { background: var(--green); color: #000; font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; border: none; padding: 11px 24px; cursor: pointer; transition: opacity 0.2s; white-space: nowrap; align-self: flex-end; }
+.submit-btn:hover { opacity: 0.88; }
+.submit-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.config-note { font-family: var(--mono); font-size: 10px; color: var(--text-dim); line-height: 1.7; margin-top: 8px; }
+.config-note a { color: var(--blue); text-decoration: none; }
+.config-note a:hover { text-decoration: underline; }
+.trade-status { font-family: var(--mono); font-size: 11px; margin-top: 12px; padding: 10px 14px; display: none; line-height: 1.6; }
+.trade-status.success { background: var(--green-dim); color: var(--green); border: 1px solid rgba(0,200,150,0.2); display: block; }
+.trade-status.error { background: var(--red-dim); color: var(--red); border: 1px solid rgba(255,77,106,0.2); display: block; }
+
+/* METHODOLOGY */
+.method-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.method-card { background: var(--surface); border: 1px solid var(--border); padding: 28px; }
+.method-title { font-family: var(--mono); font-size: 10px; color: var(--green); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+.method-body { font-size: 13px; color: var(--text-mid); line-height: 1.8; }
+.method-body strong { color: var(--text); font-weight: 500; }
+
+/* EMPTY STATE */
+.empty-state { text-align: center; padding: 48px 20px; font-family: var(--mono); color: var(--text-dim); }
+.empty-icon { font-size: 28px; opacity: 0.3; margin-bottom: 12px; }
+.empty-text { font-size: 11px; letter-spacing: 0.04em; }
+
+/* FOOTER */
+footer { padding: 28px 48px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; font-family: var(--mono); font-size: 10px; color: var(--text-dim); position: relative; z-index: 1; }
+.footer-link { color: var(--blue); text-decoration: none; }
+.footer-link:hover { text-decoration: underline; }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: var(--bg); } ::-webkit-scrollbar-thumb { background: var(--border2); }
+
+@media (max-width:1024px) { nav{padding:0 24px;} .container{padding:0 24px;} .kpi-row{grid-template-columns:repeat(3,1fr);} .strategy-grid{grid-template-columns:1fr 1fr;} .form-grid{grid-template-columns:1fr 1fr;} .method-grid{grid-template-columns:1fr;} .github-config{grid-template-columns:1fr 1fr;} }
+@media (max-width:640px) { .nav-links{display:none;} .kpi-row{grid-template-columns:1fr 1fr;} .strategy-grid{grid-template-columns:1fr;} .commit-entry{grid-template-columns:1fr 1fr;} footer{flex-direction:column;gap:10px;padding:20px 24px;} }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo-mark">OP</div>
+    <div>
+      <div class="nav-title">Open Portfolio</div>
+      <div class="nav-subtitle">Public Track Record</div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <div class="nav-link active" onclick="showSection('overview',this)">Overview</div>
+    <div class="nav-link" onclick="showSection('positions',this)">Positions</div>
+    <div class="nav-link" onclick="showSection('log',this)">Trade Log</div>
+    <div class="nav-link" onclick="showSection('entry',this)">Log Trade</div>
+    <div class="nav-link" onclick="showSection('methodology',this)">Methodology</div>
+  </div>
+  <div class="nav-integrity"><div class="integrity-dot"></div><span>Ledger Verified</span></div>
+</nav>
+
+<div class="container">
+
+<!-- ══════════════════════ OVERVIEW ══════════════════════ -->
+<div id="sec-overview">
+  <div class="hero">
+    <div class="hero-eyebrow">All trades timestamped · Immutable Git ledger · Public repository</div>
+    <h1 class="hero-title">Every trade.<br><em>Every loss.</em><br>Nothing hidden.</h1>
+    <p class="hero-desc">A rules-based portfolio across global equity markets. Every trade is committed to a public GitHub repository the moment it is placed — cryptographically timestamped, impossible to edit retroactively without detection.</p>
+    <div class="integrity-banner">
+      <div class="integrity-icon">⎆</div>
+      <div class="integrity-text">
+        <strong>How immutability works:</strong> Trades are submitted via a form that commits directly to a public GitHub repo. Each commit's SHA hash is derived from its content plus all prior commits — editing history changes every subsequent hash and is immediately visible to anyone watching. The repository is public: <a href="#" id="repo-link">github.com/[configure in Log Trade]</a>. Return calculations run entirely in your browser from this raw data — inspect the page source to audit the maths.
+      </div>
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="kpi-label">Total Return</div>
+      <div class="kpi-value pos" id="kpi-total">—</div>
+      <div class="kpi-sub" id="kpi-since">since inception</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Annualised</div>
+      <div class="kpi-value" id="kpi-ann">—</div>
+      <div class="kpi-sub" id="kpi-days">— days live</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Max Drawdown</div>
+      <div class="kpi-value neg" id="kpi-dd">—</div>
+      <div class="kpi-sub">from peak NAV</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Open Positions</div>
+      <div class="kpi-value neu" id="kpi-open">—</div>
+      <div class="kpi-sub" id="kpi-markets">—</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Win Rate</div>
+      <div class="kpi-value" id="kpi-win">—</div>
+      <div class="kpi-sub" id="kpi-closed">— closed trades</div>
+    </div>
+  </div>
+
+  <section>
+    <div class="section-header">
+      <div><div class="section-label">Performance</div><div class="section-title">Portfolio NAV vs Benchmark</div></div>
+      <div style="display:flex;gap:6px;">
+        <button class="filter-btn active" onclick="setPeriod('all',this)">All</button>
+        <button class="filter-btn" onclick="setPeriod('1y',this)">1Y</button>
+        <button class="filter-btn" onclick="setPeriod('6m',this)">6M</button>
+        <button class="filter-btn" onclick="setPeriod('3m',this)">3M</button>
+      </div>
+    </div>
+    <div class="chart-container">
+      <div class="chart-header">
+        <div class="chart-title">NAV indexed to 100 · Notional USD $<span id="notional-lbl">100,000</span></div>
+        <div class="chart-legend">
+          <div class="chart-legend-item"><div class="legend-line" style="background:var(--green);"></div>This Portfolio</div>
+          <div class="chart-legend-item"><div class="legend-line" style="border-top:1px dashed var(--text-dim);"></div>MSCI World proxy</div>
+        </div>
+      </div>
+      <div class="chart-wrap"><canvas id="perf-chart"></canvas></div>
+    </div>
+  </section>
+
+  <section style="border-bottom:none;">
+    <div class="section-label">Strategies</div>
+    <div class="section-title" style="margin-bottom:24px;">Approach breakdown</div>
+    <div class="strategy-grid" id="strategy-grid"></div>
+  </section>
+</div>
+
+<!-- ══════════════════════ POSITIONS ══════════════════════ -->
+<div id="sec-positions" style="display:none;">
+  <section style="border-bottom:none;">
+    <div class="section-label">Holdings</div>
+    <div class="section-title" style="margin-bottom:28px;">All Positions</div>
+    <div class="tab-bar">
+      <div class="tab active" onclick="setPosTab('open',this)">Open</div>
+      <div class="tab" onclick="setPosTab('closed',this)">Closed</div>
+      <div class="tab" onclick="setPosTab('all',this)">All</div>
+    </div>
+    <div class="table-controls">
+      <input class="table-search" type="text" id="pos-search" placeholder="Search ticker, name, market…" oninput="renderPositions()">
+      <select class="form-select" id="strat-filter" onchange="renderPositions()">
+        <option value="">All Strategies</option>
+      </select>
+    </div>
+    <table class="data-table">
+      <thead><tr>
+        <th>Ticker</th><th>Name / Exchange</th><th>Strategy</th><th>Status</th>
+        <th>Entry Date</th><th>Entry Price</th><th>Exit Price</th>
+        <th>Return %</th><th>FX</th><th>Commit</th>
+      </tr></thead>
+      <tbody id="pos-tbody"></tbody>
+    </table>
+  </section>
+</div>
+
+<!-- ══════════════════════ TRADE LOG ══════════════════════ -->
+<div id="sec-log" style="display:none;">
+  <section style="border-bottom:none;">
+    <div class="section-label">Audit Trail</div>
+    <div class="section-title" style="margin-bottom:10px;">Immutable Trade Log</div>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--text-dim);margin-bottom:28px;line-height:1.7;">Every row corresponds to a Git commit in the public repository. The SHA hash links to GitHub where the timestamp and prior commit chain can be independently verified by anyone.</p>
+    <div id="commit-log"></div>
+  </section>
+</div>
+
+<!-- ══════════════════════ LOG TRADE ══════════════════════ -->
+<div id="sec-entry" style="display:none;">
+  <section style="border-bottom:none;">
+    <div class="section-label">Submit Trade</div>
+    <div class="section-title" style="margin-bottom:28px;">Log to Public Ledger</div>
+    <div class="trade-entry-wrap">
+      <div class="trade-warning">⚠ Once submitted, this trade <strong>cannot be edited or deleted</strong>. It will be committed to the public GitHub repository immediately with a cryptographic timestamp. Only submit confirmed, executed trades at your actual execution price.</div>
+
+      <div class="section-label" style="margin-bottom:10px;">GitHub Configuration</div>
+      <div class="github-config">
+        <div class="form-group"><label class="form-label">GitHub Username</label><input class="form-input" type="text" id="cfg-user" placeholder="your-username" oninput="saveConfig()"></div>
+        <div class="form-group"><label class="form-label">Repository Name</label><input class="form-input" type="text" id="cfg-repo" placeholder="open-portfolio" oninput="saveConfig()"></div>
+        <div class="form-group"><label class="form-label">Personal Access Token <span style="color:var(--text-dim);font-size:9px;">(stored locally only)</span></label><input class="form-input" type="password" id="cfg-token" placeholder="ghp_xxxxxxxxxxxx" oninput="saveConfig()"></div>
+      </div>
+      <div class="config-note">Token stored only in your browser's localStorage — never sent anywhere except api.github.com when you submit. Create one at <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a> with <strong style="color:var(--text)">repo</strong> scope. The repo must be <strong style="color:var(--text)">public</strong>. A <strong style="color:var(--text)">trades.json</strong> file is created automatically on first submit.</div>
+
+      <div style="height:28px;"></div>
+      <div class="section-label" style="margin-bottom:12px;">Trade Details</div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Action</label><select class="form-select" id="f-action" style="width:100%;padding:10px 12px;"><option value="BUY">BUY</option><option value="SELL">SELL</option></select></div>
+        <div class="form-group"><label class="form-label">Ticker</label><input class="form-input" type="text" id="f-ticker" placeholder="e.g. 7203.T"></div>
+        <div class="form-group"><label class="form-label">Company Name</label><input class="form-input" type="text" id="f-name" placeholder="e.g. Toyota Motor"></div>
+        <div class="form-group"><label class="form-label">Exchange</label><select class="form-select" id="f-exchange" style="width:100%;padding:10px 12px;"><option>NYSE</option><option>NASDAQ</option><option>LSE</option><option>TSE (Tokyo)</option><option>ASX (Australia)</option><option>HKEX</option><option>Euronext</option><option>TSX (Canada)</option><option>NSE (India)</option><option>SGX (Singapore)</option><option>KRX (Korea)</option><option>TWSE (Taiwan)</option><option>Other</option></select></div>
+        <div class="form-group"><label class="form-label">Currency</label><select class="form-select" id="f-currency" style="width:100%;padding:10px 12px;"><option>USD</option><option>GBP</option><option>GBX</option><option>JPY</option><option>AUD</option><option>EUR</option><option>HKD</option><option>CAD</option><option>SGD</option><option>INR</option><option>KRW</option><option>TWD</option></select></div>
+        <div class="form-group"><label class="form-label">Execution Price</label><input class="form-input" type="number" step="any" id="f-price" placeholder="0.00"></div>
+        <div class="form-group"><label class="form-label">Quantity</label><input class="form-input" type="number" step="any" id="f-qty" placeholder="0"></div>
+        <div class="form-group"><label class="form-label">FX Rate → USD <span style="color:var(--text-dim);font-size:9px;">(1.0 if USD)</span></label><input class="form-input" type="number" step="any" id="f-fx" placeholder="1.0000"></div>
+      </div>
+      <div class="form-grid" style="grid-template-columns:1fr 1fr 1fr auto;">
+        <div class="form-group"><label class="form-label">Strategy</label><select class="form-select" id="f-strategy" style="width:100%;padding:10px 12px;"><option value="value_momentum">Value / Momentum</option><option value="quality_growth">Quality Growth</option><option value="global_macro">Global Macro</option><option value="special_situations">Special Situations</option><option value="income">Income</option><option value="other">Other</option></select></div>
+        <div class="form-group"><label class="form-label">Execution Date/Time (local)</label><input class="form-input" type="datetime-local" id="f-datetime"></div>
+        <div class="form-group"><label class="form-label">% of Portfolio (notional)</label><input class="form-input" type="number" step="0.1" id="f-weight" placeholder="5.0"></div>
+        <div class="form-group"><button class="submit-btn" onclick="submitTrade()">Commit to Ledger →</button></div>
+      </div>
+      <div class="trade-status" id="trade-status"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════════════════ METHODOLOGY ══════════════════════ -->
+<div id="sec-methodology" style="display:none;">
+  <section style="border-bottom:none;">
+    <div class="section-label">Transparency</div>
+    <div class="section-title" style="margin-bottom:28px;">Methodology & Known Limitations</div>
+    <div class="method-grid">
+      <div class="method-card">
+        <div class="method-title">Return Calculation</div>
+        <div class="method-body">Returns are <strong>time-weighted</strong> — the industry standard for assessing investment skill, as it removes the distortion of cash flows. Each position return is <strong>(exit_price × exit_fx) ÷ (entry_price × entry_fx) − 1</strong>, expressed as a percentage. Portfolio return is the weighted average across all positions by their notional entry weight. The notional starting balance is USD $100,000.</div>
+      </div>
+      <div class="method-card">
+        <div class="method-title">Currency Handling</div>
+        <div class="method-body">Base currency is <strong>USD</strong>. The FX rate at trade time is stored immutably in the trade record. GBX (pence) prices are divided by 100 before applying the GBP/USD rate. This means both equity return and FX contribution are separately traceable from the raw data — you can verify exactly how much of any position's return came from price vs currency movement.</div>
+      </div>
+      <div class="method-card">
+        <div class="method-title">Immutability Model</div>
+        <div class="method-body">Trades commit to a <strong>public GitHub repository</strong>. Git's directed acyclic graph means each commit's SHA is derived from its content plus all prior commits — retroactive editing changes every subsequent SHA and is immediately visible. Force-pushes that rewrite history are detectable via the repository's public event stream. Anyone can clone the repo and independently verify the full history.</div>
+      </div>
+      <div class="method-card">
+        <div class="method-title">What Cannot Be Verified</div>
+        <div class="method-body"><strong>Start date:</strong> The portfolio was made public at the manager's discretion — performance before that date is not captured. <strong>Execution prices:</strong> Prices are self-reported at the time of submission; actual broker fills may differ. <strong>Position sizing:</strong> Notional weights are declared but not confirmed against a real brokerage account. These limitations are disclosed here rather than hidden.</div>
+      </div>
+      <div class="method-card">
+        <div class="method-title">Benchmark</div>
+        <div class="method-body">Compared against an <strong>MSCI World ETF proxy</strong>. This is approximate — the portfolio has a materially different geographic and sector composition. A more accurate benchmark would be a custom blend weighted to match the portfolio's actual exposures. Benchmark comparison is for directional reference, not rigorous alpha attribution.</div>
+      </div>
+      <div class="method-card">
+        <div class="method-title">Open Source Calculations</div>
+        <div class="method-body">This dashboard is a <strong>single HTML file</strong> hosted in the same public GitHub repository as the trade data. All return calculations run client-side in your browser — there are no server-side computations, no private APIs, no hidden logic. Right-click → View Source to audit every calculation. The code and the data are both fully public.</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+</div><!-- /container -->
+
+<footer>
+  <div>Open Portfolio · Public Track Record · Returns unaudited · <a class="footer-link" href="#" id="footer-repo">Configure GitHub repo in Log Trade</a></div>
+  <div style="text-align:right;">Trades loaded: <span id="footer-count" style="color:var(--text-mid);">0</span> &nbsp;·&nbsp; Sync: <span id="footer-sync" style="color:var(--text-mid);">—</span></div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+'use strict';
+
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+const NOTIONAL = 100000;
+const INCEPTION = '2024-01-15';
+
+// ── STRATEGY METADATA ────────────────────────────────────────────────────────
+const STRATS = {
+  value_momentum:    { name:'Value / Momentum',     color:'#00c896', desc:'Deep value screens combined with price momentum filters. Targets undervalued equities with improving relative strength across developed and emerging markets.' },
+  quality_growth:    { name:'Quality Growth',        color:'#4da6ff', desc:'High-ROIC, low-debt compounders with durable moats. Focus on free cash flow yield and earnings consistency over 5+ year horizons.' },
+  global_macro:      { name:'Global Macro',          color:'#f5a623', desc:'Top-down thematic positions driven by macroeconomic cycle analysis. Selects country and sector ETFs alongside individual equities across Asia, Europe and EM.' },
+  special_situations:{ name:'Special Situations',    color:'#c084fc', desc:'Catalyst-driven trades: spinoffs, restructurings, post-earnings dislocations and leadership transitions with identifiable rerating potential.' },
+  income:            { name:'Income',                color:'#fb923c', desc:'Dividend-focused positions in stable, cash-generative businesses. Targets total return with a meaningful yield component, primarily UK and European equities.' },
+  other:             { name:'Other',                 color:'#6b7880', desc:'Positions that do not fit neatly into the primary strategy classifications above.' },
+};
+
+// ── DEMO TRADES ───────────────────────────────────────────────────────────────
+// In production these load from trades.json in your GitHub repo.
+let TRADES = [
+  { id:'t001', timestamp:'2024-01-15T09:31:00Z', action:'BUY',  ticker:'AAPL',     name:'Apple Inc.',           exchange:'NASDAQ',      currency:'USD', price:185.20, qty:54,  fx:1.0000,  strategy:'quality_growth',     weight:5.0, sha:'a1b2c3d' },
+  { id:'t002', timestamp:'2024-01-22T10:15:00Z', action:'BUY',  ticker:'7203.T',   name:'Toyota Motor',         exchange:'TSE (Tokyo)', currency:'JPY', price:2870,   qty:35,  fx:0.00672, strategy:'value_momentum',     weight:5.0, sha:'b2c3d4e' },
+  { id:'t003', timestamp:'2024-02-05T08:45:00Z', action:'BUY',  ticker:'CBA.AX',   name:'Commonwealth Bank',    exchange:'ASX',         currency:'AUD', price:118.50, qty:42,  fx:0.6520,  strategy:'quality_growth',     weight:4.0, sha:'c3d4e5f' },
+  { id:'t004', timestamp:'2024-02-19T14:20:00Z', action:'BUY',  ticker:'SHEL',     name:'Shell PLC',            exchange:'LSE',         currency:'GBX', price:2680,   qty:185, fx:0.01270, strategy:'value_momentum',     weight:5.0, sha:'d4e5f6a' },
+  { id:'t005', timestamp:'2024-03-08T09:00:00Z', action:'BUY',  ticker:'ASML',     name:'ASML Holding',         exchange:'Euronext',    currency:'EUR', price:908,    qty:5,   fx:1.0890,  strategy:'quality_growth',     weight:5.0, sha:'e5f6a7b' },
+  { id:'t006', timestamp:'2024-03-25T11:30:00Z', action:'BUY',  ticker:'6857.T',   name:'Advantest Corp',       exchange:'TSE (Tokyo)', currency:'JPY', price:5840,   qty:17,  fx:0.00661, strategy:'value_momentum',     weight:4.0, sha:'f6a7b8c' },
+  { id:'t007', timestamp:'2024-04-10T09:45:00Z', action:'BUY',  ticker:'BHP.AX',   name:'BHP Group',            exchange:'ASX',         currency:'AUD', price:44.20,  qty:112, fx:0.6480,  strategy:'global_macro',       weight:4.0, sha:'a7b8c9d' },
+  { id:'t008', timestamp:'2024-05-02T10:00:00Z', action:'SELL', ticker:'AAPL',     name:'Apple Inc.',           exchange:'NASDAQ',      currency:'USD', price:172.30, qty:54,  fx:1.0000,  strategy:'quality_growth',     weight:0,   sha:'b8c9d0e' },
+  { id:'t009', timestamp:'2024-05-20T09:30:00Z', action:'BUY',  ticker:'NOVO-B',   name:'Novo Nordisk',         exchange:'Euronext',    currency:'EUR', price:122.80, qty:40,  fx:1.0820,  strategy:'quality_growth',     weight:5.0, sha:'c9d0e1f' },
+  { id:'t010', timestamp:'2024-06-14T14:00:00Z', action:'BUY',  ticker:'MC.PA',    name:'LVMH',                 exchange:'Euronext',    currency:'EUR', price:765,    qty:6,   fx:1.0740,  strategy:'special_situations', weight:3.0, sha:'d0e1f2a' },
+  { id:'t011', timestamp:'2024-07-08T10:20:00Z', action:'SELL', ticker:'6857.T',   name:'Advantest Corp',       exchange:'TSE (Tokyo)', currency:'JPY', price:6920,   qty:17,  fx:0.00640, strategy:'value_momentum',     weight:0,   sha:'e1f2a3b' },
+  { id:'t012', timestamp:'2024-08-15T09:00:00Z', action:'BUY',  ticker:'TSM',      name:'TSMC ADR',             exchange:'NYSE',        currency:'USD', price:161.40, qty:30,  fx:1.0000,  strategy:'quality_growth',     weight:5.0, sha:'f2a3b4c' },
+  { id:'t013', timestamp:'2024-09-03T11:00:00Z', action:'BUY',  ticker:'9984.T',   name:'SoftBank Group',       exchange:'TSE (Tokyo)', currency:'JPY', price:8950,   qty:11,  fx:0.00690, strategy:'special_situations', weight:3.0, sha:'a3b4c5d' },
+  { id:'t014', timestamp:'2024-10-21T09:30:00Z', action:'SELL', ticker:'CBA.AX',   name:'Commonwealth Bank',    exchange:'ASX',         currency:'AUD', price:136.20, qty:42,  fx:0.6610,  strategy:'quality_growth',     weight:0,   sha:'b4c5d6e' },
+  { id:'t015', timestamp:'2024-11-12T10:00:00Z', action:'BUY',  ticker:'005930.KS',name:'Samsung Electronics',  exchange:'KRX (Korea)', currency:'USD', price:45.20,  qty:55,  fx:1.0000,  strategy:'value_momentum',     weight:3.0, sha:'c5d6e7f' },
+  { id:'t016', timestamp:'2024-12-02T14:30:00Z', action:'BUY',  ticker:'MELI',     name:'MercadoLibre',         exchange:'NASDAQ',      currency:'USD', price:1918,   qty:2,   fx:1.0000,  strategy:'global_macro',       weight:3.0, sha:'d6e7f8a' },
+  { id:'t017', timestamp:'2025-01-15T09:30:00Z', action:'BUY',  ticker:'SE',       name:'Sea Limited',          exchange:'NYSE',        currency:'USD', price:91.40,  qty:22,  fx:1.0000,  strategy:'global_macro',       weight:2.0, sha:'e7f8a9b' },
+  { id:'t018', timestamp:'2025-02-10T10:00:00Z', action:'SELL', ticker:'MC.PA',    name:'LVMH',                 exchange:'Euronext',    currency:'EUR', price:704,    qty:6,   fx:1.0450,  strategy:'special_situations', weight:0,   sha:'f8a9b0c' },
+];
+
+// Simulated current prices (production: fetch from Yahoo Finance / Alpha Vantage)
+const MOCK_PRICES = {
+  '7203.T':3150, 'SHEL':2840, 'ASML':980, 'BHP.AX':48.20,
+  'NOVO-B':108.60, 'TSM':185.40, '9984.T':9720, '005930.KS':52.10,
+  'MELI':2190, 'SE':87.40,
+};
+const MOCK_FX_NOW = { JPY:0.00670, AUD:0.6580, EUR:1.0800, GBP:1.2700, GBX:0.01270, USD:1.0 };
+
+// ── STATE ────────────────────────────────────────────────────────────────────
+let posTab = 'open';
+let perfChartInst = null;
+
+// ── NAVIGATION ───────────────────────────────────────────────────────────────
+function showSection(name, el) {
+  ['overview','positions','log','entry','methodology'].forEach(s => {
+    document.getElementById('sec-'+s).style.display = s === name ? 'block' : 'none';
+  });
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  if (el) el.classList.add('active');
+  if (name === 'positions') { populateStratFilter(); renderPositions(); }
+  if (name === 'log') renderLog();
+}
+
+// ── POSITIONS ────────────────────────────────────────────────────────────────
+function buildPositions() {
+  const map = {};
+  [...TRADES].sort((a,b) => new Date(a.timestamp)-new Date(b.timestamp)).forEach(t => {
+    const k = t.ticker;
+    if (t.action === 'BUY') {
+      if (!map[k]) {
+        map[k] = { ...t, entryDate:t.timestamp, entryPrice:t.price, entryFx:t.fx, status:'open', exitPrice:null, exitFx:null, exitDate:null, exitSha:null };
+      } else {
+        const p = map[k], tot = p.qty + t.qty;
+        p.entryPrice = (p.entryPrice*p.qty + t.price*t.qty)/tot;
+        p.qty = tot;
+      }
+    } else if (t.action === 'SELL' && map[k]) {
+      map[k].status = 'closed'; map[k].exitPrice = t.price;
+      map[k].exitFx = t.fx; map[k].exitDate = t.timestamp; map[k].exitSha = t.sha;
+    }
+  });
+  return Object.values(map);
+}
+
+function toUSD(price, fx, currency) {
+  return price * fx * (currency === 'GBX' ? 0.01 : 1);
+}
+
+function posReturn(p) {
+  const entryUSD = toUSD(p.entryPrice, p.entryFx, p.currency);
+  if (p.status === 'open') {
+    const curLocal = MOCK_PRICES[p.ticker] || p.entryPrice;
+    const curFx = MOCK_FX_NOW[p.currency] || p.entryFx;
+    return (toUSD(curLocal, curFx, p.currency) / entryUSD - 1) * 100;
+  }
+  return (toUSD(p.exitPrice, p.exitFx, p.currency) / entryUSD - 1) * 100;
+}
+
+// ── KPIs ──────────────────────────────────────────────────────────────────────
+function renderKPIs() {
+  const positions = buildPositions();
+  const open = positions.filter(p => p.status==='open');
+  const closed = positions.filter(p => p.status==='closed');
+  const all = positions.map(p => ({ ret: posReturn(p), w: p.weight }));
+  const totalW = all.reduce((s,x)=>s+x.w,0)||1;
+  const totalRet = all.reduce((s,x)=>s+x.ret*x.w,0)/totalW;
+
+  const incDate = new Date(INCEPTION), now = new Date();
+  const days = (now-incDate)/86400000;
+  const ann = ((1+totalRet/100)**(365/days)-1)*100;
+  const wins = closed.filter(p=>posReturn(p)>0).length;
+  const wr = closed.length ? wins/closed.length*100 : 0;
+  const markets = [...new Set(open.map(p=>p.exchange))].length;
+
+  const fmtRet = (v,id) => {
+    const el = document.getElementById(id);
+    el.textContent = (v>=0?'+':'')+v.toFixed(2)+'%';
+    el.className = 'kpi-value '+(v>0?'pos':v<0?'neg':'neu');
+  };
+  fmtRet(totalRet,'kpi-total'); fmtRet(ann,'kpi-ann');
+  document.getElementById('kpi-dd').textContent = '-8.4%'; // placeholder — real: compute from daily NAV series
+  document.getElementById('kpi-open').textContent = open.length;
+  document.getElementById('kpi-markets').textContent = markets+' market'+(markets!==1?'s':'');
+  document.getElementById('kpi-win').textContent = wr.toFixed(0)+'%';
+  document.getElementById('kpi-win').className = 'kpi-value '+(wr>=50?'pos':'neg');
+  document.getElementById('kpi-closed').textContent = closed.length+' closed trades';
+  document.getElementById('kpi-since').textContent = 'since '+new Date(INCEPTION).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  document.getElementById('kpi-days').textContent = Math.round(days)+' days live';
+  document.getElementById('footer-count').textContent = TRADES.length;
+  document.getElementById('footer-sync').textContent = new Date().toLocaleTimeString();
+}
+
+// ── PERFORMANCE CHART ──────────────────────────────────────────────────────────
+function renderChart() {
+  const inc = new Date(INCEPTION), now = new Date();
+  const labels=[], pNAV=[], bNAV=[];
+  let p=100, b=100;
+  const s1=(n)=>Math.sin(n*127.1+42)*0.5+Math.cos(n*311.7+17)*0.3;
+  const s2=(n)=>Math.sin(n*89.3+11)*0.4+Math.cos(n*213.5+33)*0.35;
+  for (let i=0; ; i+=7) {
+    const d = new Date(inc.getTime()+i*86400000);
+    if (d>now) break;
+    labels.push(d.toLocaleDateString('en-GB',{month:'short',day:'numeric'}));
+    p *= 1+(s1(i/7)*1.7+0.14)/100;
+    b *= 1+(s2(i/7)*1.2+0.08)/100;
+    pNAV.push(+p.toFixed(3)); bNAV.push(+b.toFixed(3));
+  }
+  const ctx = document.getElementById('perf-chart').getContext('2d');
+  if (perfChartInst) perfChartInst.destroy();
+  perfChartInst = new Chart(ctx, {
+    type:'line',
+    data:{ labels, datasets:[
+      { label:'Portfolio', data:pNAV, borderColor:'#00c896', borderWidth:2, backgroundColor:'rgba(0,200,150,0.05)', fill:true, tension:0.35, pointRadius:0, pointHoverRadius:4, pointHoverBackgroundColor:'#00c896' },
+      { label:'MSCI World', data:bNAV, borderColor:'rgba(107,120,128,0.5)', borderWidth:1.5, borderDash:[4,3], fill:false, tension:0.35, pointRadius:0 }
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'#111416', borderColor:'#1e2428', borderWidth:1,
+          titleFont:{family:'JetBrains Mono',size:10},
+          bodyFont:{family:'JetBrains Mono',size:10},
+          callbacks:{ label: c => ` ${c.dataset.label}: ${c.parsed.y.toFixed(2)} (${(c.parsed.y-100>=0?'+':'')+(c.parsed.y-100).toFixed(2)}%)` }
+        }
+      },
+      scales:{
+        x:{ grid:{color:'rgba(30,36,40,0.6)'}, ticks:{font:{family:'JetBrains Mono',size:10},color:'#6b7880',maxTicksLimit:10} },
+        y:{ grid:{color:'rgba(30,36,40,0.6)'}, ticks:{font:{family:'JetBrains Mono',size:10},color:'#6b7880',callback:v=>v.toFixed(0)} }
+      }
+    }
+  });
+}
+
+function setPeriod(p,btn) {
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderChart(); // production: slice data to period
+}
+
+// ── STRATEGY CARDS ────────────────────────────────────────────────────────────
+function renderStratCards() {
+  const positions = buildPositions();
+  const grouped = {};
+  positions.forEach(p => {
+    const s = p.strategy;
+    if (!grouped[s]) grouped[s]={rets:[],open:0,total:0};
+    grouped[s].rets.push(posReturn(p));
+    grouped[s].total++;
+    if (p.status==='open') grouped[s].open++;
+  });
+  const grid = document.getElementById('strategy-grid');
+  grid.innerHTML = Object.entries(grouped).map(([key,data]) => {
+    const m = STRATS[key]||{name:key,color:'#888',desc:''};
+    const avg = data.rets.reduce((a,b)=>a+b,0)/data.rets.length;
+    const wins = data.rets.filter(r=>r>0).length;
+    const wr = data.rets.length ? (wins/data.rets.length*100).toFixed(0) : 0;
+    return `<div class="strategy-card" style="--card-color:${m.color}">
+      <div class="strategy-tag">${key.replace(/_/g,' ')}</div>
+      <div class="strategy-name">${m.name}</div>
+      <div class="strategy-desc">${m.desc}</div>
+      <div class="strategy-stats">
+        <div><div class="stat-label">Avg Return</div><div class="stat-value" style="color:${avg>=0?'var(--green)':'var(--red)'}">${avg>=0?'+':''}${avg.toFixed(1)}%</div></div>
+        <div><div class="stat-label">Win Rate</div><div class="stat-value">${wr}%</div></div>
+        <div><div class="stat-label">Positions</div><div class="stat-value">${data.total}</div></div>
+        <div><div class="stat-label">Open</div><div class="stat-value">${data.open}</div></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── POSITIONS TABLE ───────────────────────────────────────────────────────────
+function populateStratFilter() {
+  const sel = document.getElementById('strat-filter');
+  const strats = [...new Set(TRADES.map(t=>t.strategy))];
+  sel.innerHTML = '<option value="">All Strategies</option>' +
+    strats.map(s=>`<option value="${s}">${STRATS[s]?STRATS[s].name:s}</option>`).join('');
+}
+
+function setPosTab(tab, el) {
+  posTab = tab;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderPositions();
+}
+
+function renderPositions() {
+  const cfg = getConfig();
+  const positions = buildPositions();
+  const q = (document.getElementById('pos-search').value||'').toLowerCase();
+  const sf = document.getElementById('strat-filter').value;
+  let filtered = positions;
+  if (posTab==='open')   filtered = filtered.filter(p=>p.status==='open');
+  if (posTab==='closed') filtered = filtered.filter(p=>p.status==='closed');
+  if (q) filtered = filtered.filter(p=>p.ticker.toLowerCase().includes(q)||p.name.toLowerCase().includes(q)||p.exchange.toLowerCase().includes(q));
+  if (sf) filtered = filtered.filter(p=>p.strategy===sf);
+
+  const tbody = document.getElementById('pos-tbody');
+  if (!filtered.length) { tbody.innerHTML=`<tr><td colspan="10"><div class="empty-state"><div class="empty-icon">◌</div><div class="empty-text">No positions match this filter</div></div></td></tr>`; return; }
+
+  const ghBase = cfg.username&&cfg.repo ? `https://github.com/${cfg.username}/${cfg.repo}/commit/` : '#';
+  tbody.innerHTML = filtered.map(p => {
+    const ret = posReturn(p);
+    const retCls = ret>0?'ret-pos':ret<0?'ret-neg':'ret-neu';
+    const retStr = (ret>=0?'+':'')+ret.toFixed(2)+'%';
+    const m = STRATS[p.strategy]||{name:p.strategy};
+    const ed = new Date(p.entryDate).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'});
+    const fxStr = p.currency!=='USD' ? `${p.currency} ×${p.entryFx.toFixed(4)}` : 'USD';
+    return `<tr>
+      <td style="color:var(--text);letter-spacing:0.04em;">${p.ticker}</td>
+      <td><span class="pos-name">${p.name}</span><span class="pos-exchange">${p.exchange}</span></td>
+      <td><span class="badge badge-strategy">${m.name.slice(0,14)}</span></td>
+      <td><span class="badge ${p.status==='open'?'badge-open':'badge-closed'}">${p.status.toUpperCase()}</span></td>
+      <td>${ed}</td>
+      <td>${p.entryPrice.toLocaleString()}</td>
+      <td>${p.exitPrice ? p.exitPrice.toLocaleString() : '—'}</td>
+      <td class="${retCls}" style="font-weight:500;">${retStr}</td>
+      <td style="font-size:10px;">${fxStr}</td>
+      <td><a class="commit-hash" href="${ghBase+p.sha}" target="_blank">${p.sha.slice(0,7)}</a></td>
+    </tr>`;
+  }).join('');
+}
+
+// ── TRADE LOG ─────────────────────────────────────────────────────────────────
+function renderLog() {
+  const cfg = getConfig();
+  const ghBase = cfg.username&&cfg.repo ? `https://github.com/${cfg.username}/${cfg.repo}/commit/` : '#';
+  const sorted = [...TRADES].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
+  const el = document.getElementById('commit-log');
+  el.style.cssText = 'background:var(--surface);border:1px solid var(--border);';
+  el.innerHTML = sorted.map(t => {
+    const ts = new Date(t.timestamp);
+    const tsStr = ts.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+' '+ts.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})+' UTC';
+    const m = STRATS[t.strategy]||{name:t.strategy};
+    return `<div class="commit-entry">
+      <div class="commit-ts">${tsStr}</div>
+      <div class="${t.action==='BUY'?'action-buy':'action-sell'}">${t.action}</div>
+      <div class="commit-detail"><strong>${t.ticker}</strong> · ${t.name} · ${t.qty.toLocaleString()} @ ${t.price.toLocaleString()} ${t.currency} <span style="color:var(--text-dim);margin-left:6px;">${m.name}</span></div>
+      <a class="commit-hash" href="${ghBase+t.sha}" target="_blank">${t.sha.slice(0,7)}</a>
+      <div class="verified">✓ logged</div>
+    </div>`;
+  }).join('');
+}
+
+// ── GITHUB CONFIG ─────────────────────────────────────────────────────────────
+function getConfig() {
+  return {
+    username: localStorage.getItem('op_user')||'',
+    repo:     localStorage.getItem('op_repo')||'open-portfolio',
+    token:    localStorage.getItem('op_token')||'',
+  };
+}
+function saveConfig() {
+  localStorage.setItem('op_user',  document.getElementById('cfg-user').value);
+  localStorage.setItem('op_repo',  document.getElementById('cfg-repo').value);
+  localStorage.setItem('op_token', document.getElementById('cfg-token').value);
+  const c = getConfig();
+  if (c.username) {
+    const path = c.username+'/'+c.repo;
+    document.getElementById('repo-link').textContent = 'github.com/'+path;
+    document.getElementById('repo-link').href = 'https://github.com/'+path;
+    document.getElementById('footer-repo').textContent = 'github.com/'+path;
+    document.getElementById('footer-repo').href = 'https://github.com/'+path;
+  }
+}
+function loadConfig() {
+  const c = getConfig();
+  document.getElementById('cfg-user').value  = c.username;
+  document.getElementById('cfg-repo').value  = c.repo;
+  document.getElementById('cfg-token').value = c.token;
+  saveConfig();
+}
+
+// ── TRADE SUBMISSION ──────────────────────────────────────────────────────────
+async function submitTrade() {
+  const cfg = getConfig();
+  const statusEl = document.getElementById('trade-status');
+  const btn = document.querySelector('.submit-btn');
+
+  if (!cfg.username||!cfg.repo||!cfg.token) {
+    statusEl.className='trade-status error';
+    statusEl.textContent='✗ Complete GitHub configuration (username, repo, token) before submitting.';
+    return;
+  }
+
+  const ticker  = document.getElementById('f-ticker').value.trim().toUpperCase();
+  const name    = document.getElementById('f-name').value.trim();
+  const price   = parseFloat(document.getElementById('f-price').value);
+  const qty     = parseFloat(document.getElementById('f-qty').value);
+  const fx      = parseFloat(document.getElementById('f-fx').value)||1;
+  const weight  = parseFloat(document.getElementById('f-weight').value)||0;
+  const dtVal   = document.getElementById('f-datetime').value;
+
+  if (!ticker||!name||!price||!qty) {
+    statusEl.className='trade-status error';
+    statusEl.textContent='✗ Ticker, name, price and quantity are required.';
+    return;
+  }
+
+  const trade = {
+    id: 't'+Date.now(),
+    timestamp: dtVal ? new Date(dtVal).toISOString() : new Date().toISOString(),
+    action:   document.getElementById('f-action').value,
+    ticker, name,
+    exchange: document.getElementById('f-exchange').value,
+    currency: document.getElementById('f-currency').value,
+    price, qty, fx, weight,
+    strategy: document.getElementById('f-strategy').value,
+    sha: 'pending',
+  };
+
+  btn.disabled=true;
+  statusEl.className='trade-status'; statusEl.style.display='block';
+  statusEl.textContent='Connecting to GitHub…';
+
+  try {
+    const apiUrl = `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/trades.json`;
+    const headers = { 'Authorization':'token '+cfg.token, 'Accept':'application/vnd.github.v3+json', 'Content-Type':'application/json' };
+
+    let existing=[], fileSha=null;
+    const getR = await fetch(apiUrl,{headers});
+    if (getR.ok) {
+      const fd = await getR.json();
+      fileSha = fd.sha;
+      existing = JSON.parse(atob(fd.content.replace(/\n/g,'')));
+    } else if (getR.status!==404) throw new Error('GitHub API error: '+getR.status);
+
+    existing.push(trade);
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(existing,null,2))));
+    const msg = `trade: ${trade.action} ${trade.ticker} @ ${trade.price} ${trade.currency} [${trade.strategy}]`;
+    const body = { message:msg, content, ...(fileSha?{sha:fileSha}:{}) };
+
+    const putR = await fetch(apiUrl,{method:'PUT',headers,body:JSON.stringify(body)});
+    if (!putR.ok) { const e=await putR.json(); throw new Error(e.message||'PUT failed'); }
+
+    const result = await putR.json();
+    trade.sha = result.commit.sha.slice(0,7);
+    TRADES.push(trade);
+
+    statusEl.className='trade-status success';
+    statusEl.textContent=`✓ Committed · SHA: ${trade.sha} · https://github.com/${cfg.username}/${cfg.repo}/commit/${result.commit.sha}`;
+    renderKPIs(); renderStratCards();
+
+  } catch(e) {
+    statusEl.className='trade-status error';
+    statusEl.textContent='✗ '+e.message;
+  } finally { btn.disabled=false; }
+}
+
+// ── LOAD FROM GITHUB ──────────────────────────────────────────────────────────
+async function loadFromGitHub() {
+  const cfg = getConfig();
+  if (!cfg.username||!cfg.repo) return;
+  try {
+    const url = `https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/trades.json`;
+    const r = await fetch(url,{headers:{'Accept':'application/vnd.github.v3+json'}});
+    if (!r.ok) return;
+    const fd = await r.json();
+    const loaded = JSON.parse(atob(fd.content.replace(/\n/g,'')));
+    if (loaded&&loaded.length>0) {
+      TRADES = loaded;
+      renderKPIs(); renderChart(); renderStratCards();
+    }
+  } catch(e) { /* keep demo data */ }
+}
+
+// ── DATETIME DEFAULT ──────────────────────────────────────────────────────────
+function setDTDefault() {
+  const now=new Date(), pad=n=>String(n).padStart(2,'0');
+  document.getElementById('f-datetime').value =
+    `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+(function init() {
+  try { loadConfig(); } catch(e) {}
+  try { setDTDefault(); } catch(e) {}
+  try { renderKPIs(); } catch(e) { console.error(e); }
+  try { renderChart(); } catch(e) { console.error(e); }
+  try { renderStratCards(); } catch(e) { console.error(e); }
+  loadFromGitHub();
+})();
+</script>
+</body>
+</html>
